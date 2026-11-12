@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+coverage/
+.env*
+!.env.example
+*.log
+.DS_Store
+.vscode/
+.idea/
+# Large/private source artifacts must be stored outside Git.
+assets/private/
+artifacts/private/
