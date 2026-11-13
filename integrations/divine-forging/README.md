@@ -12,12 +12,14 @@ Install the forge repository dependencies from its `requirements.txt` in the con
 
 ```ts
 import { createDivineForgeCore } from "@mgs/divine-forging";
-import { restrictedPythonRunner } from "./runtime/restricted-python-runner.js";
+import { NodeForgeProcessRunner } from "@mgs/divine-forging/node";
 
-const { forge } = createDivineForgeCore({
-  runner: restrictedPythonRunner,
-  executable: "python3"
+const runner = new NodeForgeProcessRunner({
+  cwd: "/opt/divine-forge",
+  timeoutMs: 120_000,
+  maxOutputBytes: 4 * 1024 * 1024
 });
+const { forge } = createDivineForgeCore({ runner, executable: "python3" });
 
 const receipt = await forge.forge("divine-artifact-forge", {
   source: { directory: "/workspace/source" },
@@ -27,7 +29,7 @@ const receipt = await forge.forge("divine-artifact-forge", {
 });
 ```
 
-The runner is host-owned and intentionally not fabricated here. Configure its working directory to the checked-out forge repository. The core exposes typed forge and verify operations; receipts are structurally validated before they are returned.
+The included Node runner uses `spawn` with `shell: false`, an absolute forge-repository working directory, a timeout, bounded combined output, and abort handling. The host must still authorize source/store/output/key paths and keep signing keys outside source control. Install Python dependencies in the controlled runtime. The core exposes typed forge and verify operations; receipts are structurally validated before they are returned.
 
 ## Boundaries
 
