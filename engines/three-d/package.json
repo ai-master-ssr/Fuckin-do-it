@@ -1,0 +1,24 @@
+{
+  "name": "@mgs/engine-three-d",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./semantic-state": "./src/semantic-state.ts",
+    "./plugins/geometric-light": "./src/plugins/geometric-light.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.180.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
