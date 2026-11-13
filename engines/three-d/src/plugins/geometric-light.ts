@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import type { SemanticEntity } from "../semantic-state.js";
+import { depthScale, type SemanticEntity } from "../semantic-state.js";
 
 export interface RenderPluginContext {
   readonly scene: THREE.Scene;
@@ -54,7 +54,8 @@ export class GeometricLightPlugin implements RenderPlugin {
       group.clear();
       group.position.set(...entity.position);
       const scale = entity.scale ?? [1, 1, 1];
-      group.scale.set(...scale);
+      const perspectiveScale = depthScale(entity.depthLayer);
+      group.scale.set(scale[0] * perspectiveScale, scale[1] * perspectiveScale, scale[2] * perspectiveScale);
 
       // Verification cost: hard concentric rings, with intensity and count
       // increasing with the supplied cost value.
