@@ -7,7 +7,10 @@
     "@mgs/artifact-contracts": "workspace:*",
     "@mgs/artifact-core": "workspace:*"
   },
-  "devDependencies": { "vitest": "^3.0.0" },
-  "exports": { ".": "./src/index.ts" },
+  "devDependencies": { "@types/node": "^22.0.0", "vitest": "^3.0.0" },
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/node-process-runner.ts"
+  },
   "scripts": { "typecheck": "tsc --noEmit -p tsconfig.json", "test": "vitest run" }
 }
