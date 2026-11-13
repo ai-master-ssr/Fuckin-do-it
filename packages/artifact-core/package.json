@@ -1,0 +1,10 @@
+{
+  "name": "@mgs/artifact-core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": { "@mgs/artifact-contracts": "workspace:*" },
+  "devDependencies": { "vitest": "^3.0.0" },
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc --noEmit -p tsconfig.json", "test": "vitest run" }
+}
