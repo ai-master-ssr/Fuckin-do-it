@@ -50,6 +50,7 @@ export class GeometricLightPlugin implements RenderPlugin {
       const refraction = entity.refractionIndex ?? 1;
       const group = this.#groups.get(entity.id) ?? this.#createGroup(entity.id);
       active.add(entity.id);
+      this.#disposeObject(group);
       group.clear();
       group.position.set(...entity.position);
       const scale = entity.scale ?? [1, 1, 1];
