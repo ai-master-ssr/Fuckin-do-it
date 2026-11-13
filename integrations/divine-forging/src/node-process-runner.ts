@@ -54,7 +54,7 @@ export class NodeForgeProcessRunner implements ForgeProcessRunner {
       const stdout: Buffer[] = [];
       const stderr: Buffer[] = [];
       let timer: NodeJS.Timeout | undefined;
-      let child: ReturnType<typeof spawn> | undefined;
+      let killChild: (() => void) | undefined;
 
       const cleanup = (): void => {
         if (timer) clearTimeout(timer);
@@ -64,7 +64,7 @@ export class NodeForgeProcessRunner implements ForgeProcessRunner {
         if (settled) return;
         settled = true;
         cleanup();
-        child?.kill("SIGKILL");
+        killChild?.();
         reject(error);
       };
       const onAbort = (): void => fail(
@@ -84,20 +84,21 @@ export class NodeForgeProcessRunner implements ForgeProcessRunner {
       };
 
       try {
-        child = spawn(executable, argv, {
+        const child = spawn(executable, argv, {
           cwd: this.#cwd,
           env: this.#env,
           shell: false,
           windowsHide: true,
           stdio: ["ignore", "pipe", "pipe"]
         });
+        killChild = () => { child.kill("SIGKILL"); };
       } catch (error) {
         fail(error instanceof Error ? error : new Error(String(error)));
         return;
       }
 
-      child.stdout.on("data", (chunk: Buffer | string) => collect(stdout, chunk));
-      child.stderr.on("data", (chunk: Buffer | string) => collect(stderr, chunk));
+      child.stdout?.on("data", (chunk: Buffer | string) => collect(stdout, chunk));
+      child.stderr?.on("data", (chunk: Buffer | string) => collect(stderr, chunk));
       child.on("error", (error) => fail(new ArtifactForgeError(
         `Unable to start forge process: ${error.message}`,
         "divine-artifact-forge"
