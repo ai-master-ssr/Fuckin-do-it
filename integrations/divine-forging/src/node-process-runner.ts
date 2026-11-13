@@ -95,6 +95,7 @@ export class NodeForgeProcessRunner implements ForgeProcessRunner {
         fail(error instanceof Error ? error : new Error(String(error)));
         return;
       }
+      if (!child) return;
 
       child.stdout?.on("data", (chunk: Buffer | string) => collect(stdout, chunk));
       child.stderr?.on("data", (chunk: Buffer | string) => collect(stderr, chunk));
